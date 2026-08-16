@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>국밥원정대</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 60px 24px;
+    line-height: 1.6;
+    color: #2b1d12;
+    background: #fff8f0;
+    text-align: center;
+  }
+  .logo {
+    width: 96px;
+    height: 96px;
+    border-radius: 22px;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-size: 20px;
+    margin: 0 0 8px;
+  }
+  p {
+    color: #6b4226;
+    font-size: 14px;
+    margin: 0 0 28px;
+  }
+  .spinner {
+    width: 22px;
+    height: 22px;
+    margin: 0 auto 28px;
+    border: 3px solid #ead9c4;
+    border-top-color: #e8752c;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  .install-button {
+    display: inline-block;
+    padding: 14px 28px;
+    background: #e8752c;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    border-radius: 12px;
+  }
+  .hidden {
+    display: none;
+  }
+  .fallback-note {
+    margin-top: 16px;
+    font-size: 12px;
+    color: #8a6a4a;
+  }
+</style>
+</head>
+<body>
+
+<img class="logo" src="https://yoonscompany-code.github.io/gukbap-expedition-privacy/app-icon.png" alt="국밥원정대" />
+<h1>국밥원정대</h1>
+
+<div id="opening">
+  <div class="spinner"></div>
+  <p>앱에서 여는 중이에요...</p>
+</div>
+
+<div id="fallback" class="hidden">
+  <p>국밥원정대 앱이 설치되어 있지 않은 것 같아요.<br />설치 후 다시 링크를 눌러주시면 바로 이동돼요.</p>
+  <a class="install-button" id="install-link" href="https://play.google.com/store/apps/details?id=com.yoonscompany.gukbapexpedition">
+    Play 스토어에서 설치하기
+  </a>
+  <p class="fallback-note">이미 설치하셨다면, 이 링크를 다시 눌러주세요.</p>
+</div>
+
+<script>
+  var params = new URLSearchParams(window.location.search);
+  var storeId = params.get('id');
+  var deepLink = storeId
+    ? 'gukbapexpedition://store/' + encodeURIComponent(storeId)
+    : 'gukbapexpedition://';
+
+  // 앱이 설치돼 있으면 이 이동으로 곧장 앱이 뜨면서 브라우저 탭 자체가 백그라운드로
+  // 밀려나므로, 아래 타이머(폴백 표시)는 사실상 실행되지 않는다. 앱이 없으면 커스텀
+  // 스킴은 조용히 실패하고 이 페이지가 계속 보이므로, 잠시 뒤 설치 안내로 바꿔준다.
+  window.location.href = deepLink;
+
+  setTimeout(function () {
+    document.getElementById('opening').className = 'hidden';
+    document.getElementById('fallback').className = '';
+  }, 1500);
+</script>
+
+</body>
+</html>
